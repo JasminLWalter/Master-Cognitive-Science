@@ -1,6 +1,10 @@
 %---------------------------- social cognition experiment analysis------------
 % script written by Jasmin Walter
 
+% a short analysis of the joint action project during the social cognition
+% course of summer semester 2020 at University of Osnabrück
+% data was recorded via a questionnaire after collective drawing tasks
+
 clear all;
 
 cd 'D:\Studium\Master\social cognition\'
@@ -14,11 +18,9 @@ nameB = 'Group B_ Joint Action Questionnaire (Responses) - Form responses 1.csv'
 groupB = readtable(nameB);
 
 
-
-
-% analysis with boxplots & grouping variables
-g1 = repmat({'Group A'},14,1);
-g2 = repmat({'Group B'},15,1);
+%% analysis with boxplots & grouping variables
+g1 = repmat({'simple task group'},14,1);
+g2 = repmat({'complex task group'},15,1);
 grouping = [g1; g2];
 
 question1 = [groupA{:,2};groupB{:,2}];
@@ -64,8 +66,8 @@ allArs = reshape(allA,[],1);
 allB = groupB{:,2:6};
 allBrs = reshape(allB,[],1);
 
-g1 = repmat({'Group A'},size(allArs));
-g2 = repmat({'Group B'},size(allBrs));
+g1 = repmat({'Simple task group'},size(allArs));
+g2 = repmat({'Complex task group'},size(allBrs));
 groupingAll = [g1; g2];
 
 allData = [allArs; allBrs];
@@ -75,6 +77,7 @@ plotty6 = boxplot(allData,groupingAll);
 title('All questions combined')
 saveas(gcf, strcat(savepath, 'Boxplot_allData.png'));
 
+%% calculate means
 
 overviewMean = table;
 overviewMean.GroupA = mean(groupA{:,2:end})';
@@ -82,4 +85,10 @@ overviewMean.GroupB = mean(groupB{:,2:end})';
 
 overallMean = mean(overviewMean{:,:});
 
-ttesti = ttest2(groupA{:,2};groupB{:,2});
+%% complete two sampled t tests for each question/hypothesis
+[h1,p1,ci1,stats1] = ttest2(groupA{:,2},groupB{:,2},'Tail','right');
+[h2,p2,ci2,stats2] = ttest2(groupA{:,3},groupB{:,3},'Tail','right');
+[h3,p3,ci3,stats3] = ttest2(groupA{:,4},groupB{:,4},'Tail','right');
+[h4,p4,ci4,stats4] = ttest2(groupA{:,5},groupB{:,5},'Tail','right');
+[h5,p5,ci5,stats5] = ttest2(groupA{:,6},groupB{:,6},'Tail','right');
+
